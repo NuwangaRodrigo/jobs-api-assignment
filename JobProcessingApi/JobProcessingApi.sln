@@ -1,0 +1,43 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobProcessingApi.API", "src\JobProcessingApi.API\JobProcessingApi.API.csproj", "{A1234567-B890-C123-D456-E78901234567}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobProcessingApi.Core", "src\JobProcessingApi.Core\JobProcessingApi.Core.csproj", "{B2345678-C901-D234-E567-F89012345678}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobProcessingApi.Application", "src\JobProcessingApi.Application\JobProcessingApi.Application.csproj", "{C3456789-D012-E345-F678-901234567890}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobProcessingApi.Infrastructure", "src\JobProcessingApi.Infrastructure\JobProcessingApi.Infrastructure.csproj", "{D4567890-E123-F456-0789-012345678901}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobProcessingApi.Tests", "tests\JobProcessingApi.Tests\JobProcessingApi.Tests.csproj", "{E5678901-F234-0567-1890-123456789012}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1234567-B890-C123-D456-E78901234567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1234567-B890-C123-D456-E78901234567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1234567-B890-C123-D456-E78901234567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1234567-B890-C123-D456-E78901234567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2345678-C901-D234-E567-F89012345678}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2345678-C901-D234-E567-F89012345678}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2345678-C901-D234-E567-F89012345678}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2345678-C901-D234-E567-F89012345678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3456789-D012-E345-F678-901234567890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3456789-D012-E345-F678-901234567890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3456789-D012-E345-F678-901234567890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3456789-D012-E345-F678-901234567890}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4567890-E123-F456-0789-012345678901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4567890-E123-F456-0789-012345678901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4567890-E123-F456-0789-012345678901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4567890-E123-F456-0789-012345678901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5678901-F234-0567-1890-123456789012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5678901-F234-0567-1890-123456789012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5678901-F234-0567-1890-123456789012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5678901-F234-0567-1890-123456789012}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

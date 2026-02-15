@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "Job Processing API",
+    "description": "Collection for testing the Job Processing API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:7001",
+      "type": "string"
+    },
+    {
+      "key": "jobId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Start Bulk Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"jobType\": 0,\n  \"items\": [\n    \"item-1-SUCCESS\",\n    \"item-2\",\n    \"item-3-FAIL\",\n    \"item-4\",\n    \"item-5\"\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs"]
+        },
+        "description": "Start a new BULK job that processes all items even if some fail"
+      },
+      "response": []
+    },
+    {
+      "name": "Start Batch Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"jobType\": 1,\n  \"items\": [\n    \"item-1-SUCCESS\",\n    \"item-2-SUCCESS\",\n    \"item-3-FAIL\",\n    \"item-4-SUCCESS\",\n    \"item-5-SUCCESS\"\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs"]
+        },
+        "description": "Start a new BATCH job that stops on first failure"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Job Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs/{{jobId}}/status",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs", "{{jobId}}", "status"]
+        },
+        "description": "Get the current status of a job including progress"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Job Logs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs/{{jobId}}/logs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs", "{{jobId}}", "logs"]
+        },
+        "description": "Get all processing logs for a job"
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwtToken}}",
+        "type": "string"
+      }
+    ]
+  }
+}
