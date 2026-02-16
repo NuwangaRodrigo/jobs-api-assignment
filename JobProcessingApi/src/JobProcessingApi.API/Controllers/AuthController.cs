@@ -7,10 +7,10 @@ using System.Text;
 
 namespace JobProcessingApi.API.Controllers;
 
-/// <summary>
-/// Controller for authentication and token generation
-/// FOR DEVELOPMENT/TESTING PURPOSES ONLY
-/// </summary>
+//<summary>
+//Controller for authentication and token generation
+//FOR DEVELOPMENT/TESTING PURPOSES ONLY
+  
 [ApiController]
 [Route("api/[controller]")]
 [AllowAnonymous]
@@ -25,13 +25,13 @@ public class AuthController : ControllerBase
         _logger = logger;
     }
 
-    /// <summary>
-    /// Generate a JWT token for testing purposes
-    /// </summary>
-    /// <param name="request">Token request with username</param>
-    /// <returns>JWT token</returns>
-    /// <response code="200">Token generated successfully</response>
-    /// <response code="400">Invalid request</response>
+    
+    //Generate a JWT token for testing purposes
+      
+    //<param name="request">Token request with username</param>
+    //<returns>JWT token</returns>
+    //<response code="200">Token generated successfully</response>
+    //<response code="400">Invalid request</response>
     [HttpPost("token")]
     [ProducesResponseType(typeof(TokenResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -78,34 +78,34 @@ public class AuthController : ControllerBase
     }
 }
 
-/// <summary>
-/// Request model for token generation
-/// </summary>
+//<summary>
+//Request model for token generation
+  
 public class TokenRequest
 {
-    /// <summary>
-    /// Username for the token
-    /// </summary>
+    
+    //Username for the token
+      
     public string Username { get; set; } = "test-user";
 }
 
-/// <summary>
-/// Response model for token generation
-/// </summary>
+//<summary>
+//Response model for token generation
+  
 public class TokenResponse
 {
-    /// <summary>
-    /// JWT token string
-    /// </summary>
+    
+    //JWT token string
+      
     public string Token { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Token expiration time
-    /// </summary>
+    
+    //Token expiration time
+      
     public DateTime ExpiresAt { get; set; }
 
-    /// <summary>
-    /// Username associated with the token
-    /// </summary>
+    
+    //Username associated with the token
+      
     public string Username { get; set; } = string.Empty;
 }

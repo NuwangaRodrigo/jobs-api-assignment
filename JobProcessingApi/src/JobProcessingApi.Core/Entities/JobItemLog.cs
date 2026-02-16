@@ -1,8 +1,8 @@
 namespace JobProcessingApi.Core.Entities;
 
-/// <summary>
-/// Represents a log entry for a single item processed within a job
-/// </summary>
+
+// Represents a log entry for a single item processed within a job
+
 public class JobItemLog
 {
     public Guid Id { get; set; }
@@ -15,11 +15,10 @@ public class JobItemLog
     public int ProcessingTimeMs { get; set; }
 }
 
-/// <summary>
-/// Status of an individual item processing
-/// </summary>
+// Status of an individual item processing
+
 public enum JobItemStatus
 {
-    Success,
-    Failure
+    Success = 0,
+    Failure = 1
 }

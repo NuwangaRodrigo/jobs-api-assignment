@@ -2,38 +2,32 @@ using JobProcessingApi.Core.Entities;
 
 namespace JobProcessingApi.Core.Interfaces;
 
-/// <summary>
-/// Repository interface for job data access
-/// </summary>
+
+// Repository interface for job data access
+
 public interface IJobRepository
 {
-    /// <summary>
-    /// Creates a new job in the repository
-    /// </summary>
+    
+    // Creates a new job in the repository
     Task<Job> CreateAsync(Job job, CancellationToken cancellationToken = default);
     
-    /// <summary>
-    /// Retrieves a job by its ID
-    /// </summary>
+ 
+    // Retrieves a job by its ID
     Task<Job?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     
-    /// <summary>
-    /// Updates an existing job
-    /// </summary>
+ 
+    // Updates an existing job
     Task<Job> UpdateAsync(Job job, CancellationToken cancellationToken = default);
     
-    /// <summary>
-    /// Adds a log entry to a job
-    /// </summary>
+   
+    // Adds a log entry to a job
     Task AddLogAsync(Guid jobId, JobItemLog log, CancellationToken cancellationToken = default);
     
-    /// <summary>
-    /// Retrieves all logs for a specific job
-    /// </summary>
+  
+    // Retrieves all logs for a specific job
     Task<IEnumerable<JobItemLog>> GetLogsAsync(Guid jobId, CancellationToken cancellationToken = default);
     
-    /// <summary>
-    /// Retrieves all jobs (for admin/monitoring purposes)
-    /// </summary>
+  
+    // Retrieves all jobs (for admin/monitoring purposes)
     Task<IEnumerable<Job>> GetAllAsync(CancellationToken cancellationToken = default);
 }

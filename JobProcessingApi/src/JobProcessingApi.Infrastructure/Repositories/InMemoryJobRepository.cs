@@ -4,10 +4,10 @@ using System.Collections.Concurrent;
 
 namespace JobProcessingApi.Infrastructure.Repositories;
 
-/// <summary>
-/// In-memory implementation of the job repository
-/// Thread-safe using concurrent collections
-/// </summary>
+
+// In-memory implementation of the job repository
+// Thread-safe using concurrent collections
+
 public class InMemoryJobRepository : IJobRepository
 {
     private readonly ConcurrentDictionary<Guid, Job> _jobs = new();

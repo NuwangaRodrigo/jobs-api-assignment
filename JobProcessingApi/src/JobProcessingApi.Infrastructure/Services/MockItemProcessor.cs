@@ -4,10 +4,9 @@ using System.Diagnostics;
 
 namespace JobProcessingApi.Infrastructure.Services;
 
-/// <summary>
-/// Mock implementation of the external item processor
-/// Simulates processing with configurable delay and failure rate
-/// </summary>
+// Mock implementation of the external item processor
+// Simulates processing with configurable delay and failure rate
+
 public class MockItemProcessor : IItemProcessor
 {
     private readonly ILogger<MockItemProcessor> _logger;

@@ -2,30 +2,24 @@ using JobProcessingApi.Core.Entities;
 
 namespace JobProcessingApi.Core.Interfaces;
 
-/// <summary>
-/// Service interface for job operations
-/// </summary>
+// Service interface for job operations
 public interface IJobService
 {
-    /// <summary>
-    /// Starts a new job with the provided data items
-    /// </summary>
+    // Starts a new job with the provided data items
     Task<Guid> StartJobAsync(JobType jobType, IEnumerable<string> items, CancellationToken cancellationToken = default);
     
-    /// <summary>
-    /// Gets the current status of a job
-    /// </summary>
+
+    // Gets the current status of a job
+
     Task<JobStatusDto?> GetJobStatusAsync(Guid jobId, CancellationToken cancellationToken = default);
     
-    /// <summary>
-    /// Gets all logs for a specific job
-    /// </summary>
+    // Gets all logs for a specific job
+
     Task<JobLogsDto?> GetJobLogsAsync(Guid jobId, CancellationToken cancellationToken = default);
 }
 
-/// <summary>
-/// Data transfer object for job status
-/// </summary>
+// Data transfer object for job status
+
 public class JobStatusDto
 {
     public Guid JobId { get; set; }
@@ -41,18 +35,17 @@ public class JobStatusDto
     public DateTime? CompletedAt { get; set; }
 }
 
-/// <summary>
-/// Data transfer object for job logs
-/// </summary>
+
+// Data transfer object for job logs
+
 public class JobLogsDto
 {
     public Guid JobId { get; set; }
     public List<JobItemLogDto> Logs { get; set; } = new();
 }
 
-/// <summary>
-/// Data transfer object for individual log entry
-/// </summary>
+// Data transfer object for individual log entry
+
 public class JobItemLogDto
 {
     public int ItemIndex { get; set; }

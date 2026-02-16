@@ -5,9 +5,8 @@ using Microsoft.Extensions.Logging;
 
 namespace JobProcessingApi.Application.Services;
 
-/// <summary>
-/// Service implementation for job operations
-/// </summary>
+//Service implementation for job operations
+  
 public class JobService : IJobService
 {
     private readonly IJobRepository _jobRepository;

@@ -6,9 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JobProcessingApi.API.Controllers;
 
-/// <summary>
-/// Controller for job processing operations
-/// </summary>
+//Controller for job processing operations
+  
 [ApiController]
 [Route("api/[controller]")]
 //[Authorize]
@@ -29,16 +28,16 @@ public class JobsController : ControllerBase
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    /// <summary>
-    /// Start a new job to process data
-    /// </summary>
-    /// <param name="command">Job configuration including type and items to process</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>The created job ID</returns>
-    /// <response code="201">Job created successfully</response>
-    /// <response code="400">Invalid request data</response>
-    /// <response code="401">Unauthorized</response>
-    /// <response code="500">Internal server error</response>
+    
+    //Start a new job to process data
+      
+    //<param name="command">Job configuration including type and items to process</param>
+    //<param name="cancellationToken">Cancellation token</param>
+    //<returns>The created job ID</returns>
+    //<response code="201">Job created successfully</response>
+    //<response code="400">Invalid request data</response>
+    //<response code="401">Unauthorized</response>
+    //<response code="500">Internal server error</response>
     [HttpPost]
     [ProducesResponseType(typeof(StartJobResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
@@ -92,15 +91,15 @@ public class JobsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Get the status of a job
-    /// </summary>
-    /// <param name="jobId">The job identifier</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Current job status including progress</returns>
-    /// <response code="200">Job status retrieved successfully</response>
-    /// <response code="404">Job not found</response>
-    /// <response code="401">Unauthorized</response>
+    
+    //Get the status of a job
+      
+    //<param name="jobId">The job identifier</param>
+    //<param name="cancellationToken">Cancellation token</param>
+    //<returns>Current job status including progress</returns>
+    //<response code="200">Job status retrieved successfully</response>
+    //<response code="404">Job not found</response>
+    //<response code="401">Unauthorized</response>
     [HttpGet("{jobId}/status")]
     [ProducesResponseType(typeof(JobStatusDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
@@ -137,15 +136,15 @@ public class JobsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Get the processing logs for a job
-    /// </summary>
-    /// <param name="jobId">The job identifier</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>All log entries for the job</returns>
-    /// <response code="200">Job logs retrieved successfully</response>
-    /// <response code="404">Job not found</response>
-    /// <response code="401">Unauthorized</response>
+    
+    //Get the processing logs for a job
+      
+    //<param name="jobId">The job identifier</param>
+    //<param name="cancellationToken">Cancellation token</param>
+    //<returns>All log entries for the job</returns>
+    //<response code="200">Job logs retrieved successfully</response>
+    //<response code="404">Job not found</response>
+    //<response code="401">Unauthorized</response>
     [HttpGet("{jobId}/logs")]
     [ProducesResponseType(typeof(JobLogsDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]

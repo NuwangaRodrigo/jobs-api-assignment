@@ -35,7 +35,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Job Processing API",
         Version = "v1",
-        Description = "API for processing bulk and batch jobs with comprehensive logging and status tracking",
+        Description = "API for creating and processing bulk and batch jobs, with support for status tracking and logging.",
         Contact = new OpenApiContact
         {
             Name = "Ohpen Engineering Team",

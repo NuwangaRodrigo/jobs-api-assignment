@@ -3,9 +3,9 @@ using System.Text.Json;
 
 namespace JobProcessingApi.API.Middleware;
 
-/// <summary>
-/// Global exception handling middleware
-/// </summary>
+//<summary>
+//Global exception handling middleware
+  
 public class GlobalExceptionMiddleware
 {
     private readonly RequestDelegate _next;
@@ -70,9 +70,9 @@ public class GlobalExceptionMiddleware
     }
 }
 
-/// <summary>
-/// Extension method for registering the middleware
-/// </summary>
+//<summary>
+//Extension method for registering the middleware
+  
 public static class GlobalExceptionMiddlewareExtensions
 {
     public static IApplicationBuilder UseGlobalExceptionMiddleware(this IApplicationBuilder builder)

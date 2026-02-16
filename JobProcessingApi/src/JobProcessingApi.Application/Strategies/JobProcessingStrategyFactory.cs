@@ -2,9 +2,9 @@ using JobProcessingApi.Core.Entities;
 
 namespace JobProcessingApi.Application.Strategies;
 
-/// <summary>
-/// Factory for creating job processing strategies based on job type
-/// </summary>
+
+//Factory for creating job processing strategies based on job type
+  
 public class JobProcessingStrategyFactory
 {
     private readonly IEnumerable<IJobProcessingStrategy> _strategies;
@@ -14,9 +14,9 @@ public class JobProcessingStrategyFactory
         _strategies = strategies ?? throw new ArgumentNullException(nameof(strategies));
     }
 
-    /// <summary>
-    /// Gets the appropriate strategy for a given job type
-    /// </summary>
+    
+    //Gets the appropriate strategy for a given job type
+      
     public IJobProcessingStrategy GetStrategy(JobType jobType)
     {
         var strategy = _strategies.FirstOrDefault(s => s.JobType == jobType);

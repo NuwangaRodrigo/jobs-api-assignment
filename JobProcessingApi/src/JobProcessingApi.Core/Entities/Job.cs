@@ -1,8 +1,7 @@
 namespace JobProcessingApi.Core.Entities;
 
-/// <summary>
-/// Represents a job that processes multiple items
-/// </summary>
+// Represents a job that processes multiple items
+
 public class Job
 {
     public Guid Id { get; set; }
@@ -23,30 +22,22 @@ public class Job
         : 0;
 }
 
-/// <summary>
-/// Types of job processing strategies
-/// </summary>
+// Types of job processing strategies
+
 public enum JobType
 {
-    /// <summary>
-    /// Processes all items in sequence, continues on failure
-    /// </summary>
-    Bulk,
-    
-    /// <summary>
-    /// Processes all items in sequence, stops on first failure
-    /// </summary>
-    Batch
+    Bulk = 0, // Processes all items in sequence, continues on failure
+    Batch = 1 // Processes all items in sequence, stops on first failure
 }
 
-/// <summary>
-/// Current status of a job
-/// </summary>
+
+// Current status of a job
+
 public enum JobStatus
 {
-    Pending,
-    Running,
-    Completed,
-    Failed,
-    PartiallyCompleted
+    Pending = 0,
+    Running = 1,
+    Completed =2,
+    Failed =3,
+    PartiallyCompleted =4
 }

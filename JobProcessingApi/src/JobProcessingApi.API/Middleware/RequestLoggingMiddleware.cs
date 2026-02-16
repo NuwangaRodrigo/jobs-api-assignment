@@ -2,9 +2,9 @@ using System.Diagnostics;
 
 namespace JobProcessingApi.API.Middleware;
 
-/// <summary>
-/// Middleware for logging HTTP requests and responses
-/// </summary>
+//<summary>
+//Middleware for logging HTTP requests and responses
+  
 public class RequestLoggingMiddleware
 {
     private readonly RequestDelegate _next;
@@ -44,9 +44,9 @@ public class RequestLoggingMiddleware
     }
 }
 
-/// <summary>
-/// Extension method for registering the middleware
-/// </summary>
+//<summary>
+//Extension method for registering the middleware
+  
 public static class RequestLoggingMiddlewareExtensions
 {
     public static IApplicationBuilder UseRequestLoggingMiddleware(this IApplicationBuilder builder)
