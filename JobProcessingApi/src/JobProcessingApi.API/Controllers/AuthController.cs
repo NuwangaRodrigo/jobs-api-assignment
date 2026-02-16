@@ -7,7 +7,7 @@ using System.Text;
 
 namespace JobProcessingApi.API.Controllers;
 
-//<summary>
+ 
 //Controller for authentication and token generation
 //FOR DEVELOPMENT/TESTING PURPOSES ONLY
   
@@ -78,7 +78,7 @@ public class AuthController : ControllerBase
     }
 }
 
-//<summary>
+ 
 //Request model for token generation
   
 public class TokenRequest
@@ -89,7 +89,7 @@ public class TokenRequest
     public string Username { get; set; } = "test-user";
 }
 
-//<summary>
+ 
 //Response model for token generation
   
 public class TokenResponse

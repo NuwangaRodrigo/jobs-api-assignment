@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace JobProcessingApi.Application.Strategies;
 
-//<summary>
+
 //BULK processing strategy: Processes all items in sequence, continues even if one fails
   
 public class BulkJobProcessingStrategy : IJobProcessingStrategy

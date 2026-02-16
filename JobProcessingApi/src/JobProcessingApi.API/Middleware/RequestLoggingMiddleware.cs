@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace JobProcessingApi.API.Middleware;
 
-//<summary>
+
 //Middleware for logging HTTP requests and responses
   
 public class RequestLoggingMiddleware
@@ -44,7 +44,7 @@ public class RequestLoggingMiddleware
     }
 }
 
-//<summary>
+ 
 //Extension method for registering the middleware
   
 public static class RequestLoggingMiddlewareExtensions

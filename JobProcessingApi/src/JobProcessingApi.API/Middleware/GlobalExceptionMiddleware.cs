@@ -3,7 +3,6 @@ using System.Text.Json;
 
 namespace JobProcessingApi.API.Middleware;
 
-//<summary>
 //Global exception handling middleware
   
 public class GlobalExceptionMiddleware
@@ -70,7 +69,7 @@ public class GlobalExceptionMiddleware
     }
 }
 
-//<summary>
+ 
 //Extension method for registering the middleware
   
 public static class GlobalExceptionMiddlewareExtensions

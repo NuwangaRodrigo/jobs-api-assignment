@@ -3,7 +3,7 @@ using JobProcessingApi.Core.Entities;
 
 namespace JobProcessingApi.Application.Validators;
 
-//<summary>
+ 
 //Request model for starting a job
   
 public class StartJobCommand
@@ -12,7 +12,7 @@ public class StartJobCommand
     public List<string> Items { get; set; } = new();
 }
 
-//<summary>
+ 
 //Validator for StartJobCommand
   
 public class StartJobCommandValidator : AbstractValidator<StartJobCommand>

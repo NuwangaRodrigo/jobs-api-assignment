@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace JobProcessingApi.Application.Strategies;
 
-//<summary>
+ 
 //BATCH processing strategy: Processes items in sequence, stops on first failure
   
 public class BatchJobProcessingStrategy : IJobProcessingStrategy
