@@ -307,30 +307,10 @@ Passed! - Failed: 0, Passed: 17, Skipped: 0
 
 ## 💾 Data Persistence
 
-**Current Implementation:** In-memory storage using `ConcurrentDictionary`
 
-**Why In-Memory?**
-- Assignment requirement: Focus on architecture, not database tech
-- Fast development and testing
-- Thread-safe for concurrent access
-- Demonstrates repository pattern correctly
+Currently using in-memory storage (ConcurrentDictionary) to keep setup simple and focus on the architecture.
 
-**Production Ready:**
-The repository pattern makes it trivial to swap storage:
-
-```csharp
-// Current (In-Memory)
-services.AddSingleton<IJobRepository, InMemoryJobRepository>();
-
-// Future (SQL Database)
-services.AddDbContext<JobDbContext>();
-services.AddScoped<IJobRepository, EfCoreJobRepository>();
-
-// Future (NoSQL)
-services.AddScoped<IJobRepository, MongoJobRepository>();
-```
-
-No changes needed to business logic when swapping implementations.
+The repository pattern means swapping to a database is easy - just implement IJobRepository and change one line in Program.cs. Business logic doesn't need to change.
 
 ---
 
