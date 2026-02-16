@@ -1,531 +1,145 @@
 # Job Processing API
 
-A production-ready ASP.NET Core REST API for processing bulk and batch jobs with comprehensive logging, status tracking, and authentication.
+ASP.NET Core REST API for processing bulk and batch jobs with status tracking and logging.
 
-Built for the Ohpen Senior Backend Code Assignment.
+## What it does
 
----
+Processes jobs containing multiple items. Supports two modes:
 
-## 🎯 Overview
+- **Bulk**: Process all items sequentially, continue even if some fail
+- **Batch**: Process items in order, stop on first failure
 
-This API allows clients to process large volumes of data for migration scenarios. It provides:
+Jobs run asynchronously in the background. Clients can submit jobs and poll for status updates.
 
-- **Two processing strategies:**
-  - **BULK**: Process all items sequentially, continue on failures
-  - **BATCH**: Process items sequentially, stop on first failure
+## Architecture
 
-- **Async job execution:** Jobs run in the background, API responds immediately
-- **Real-time status tracking:** Monitor progress, failures, and completion
-- **Detailed audit logs:** View processing results for each item
-- **JWT authentication:** Secure API access
-- **Comprehensive error handling:** Global exception middleware
-
----
-
-## 🏗️ Architecture
-
-### Clean Architecture (N-Layer)
-
+Layered architecture separating concerns:
 ```
-┌─────────────────────────────────────┐
-│  API Layer                          │
-│  Controllers, Middleware, Auth      │
-└────────────┬────────────────────────┘
-             ↓
-┌─────────────────────────────────────┐
-│  Application Layer                  │
-│  Services, Strategies, Validators   │
-└────────────┬────────────────────────┘
-             ↓
-┌─────────────────────────────────────┐
-│  Core Layer                         │
-│  Entities, Interfaces, DTOs         │
-└─────────────────────────────────────┘
-             ↑
-┌─────────────────────────────────────┐
-│  Infrastructure Layer               │
-│  Repositories, External Services    │
-└─────────────────────────────────────┘
+API Layer          → Controllers, Middleware
+Application Layer  → Services, Strategies
+Core Layer         → Domain models, Interfaces  
+Infrastructure     → Data access, External services
 ```
 
-### Design Patterns
+**Design patterns used:**
 
-**Strategy Pattern**
-- Different algorithms (BULK vs BATCH) with same interface
-- Easy to add new job types without modifying existing code
-- Each strategy has single responsibility
+**Strategy Pattern** - Different processing behaviors (Bulk vs Batch) implement the same interface. Makes adding new job types straightforward.
 
-**Repository Pattern**
-- Abstracts data access from business logic
-- Current: In-memory implementation (thread-safe with ConcurrentDictionary)
-- Future: Easy to swap for SQL, NoSQL, or cloud storage
+**Repository Pattern** - Abstracts data access from business logic. Currently uses in-memory storage, but designed to swap implementations easily.
 
-**Factory Pattern**
-- Centralizes strategy selection logic
-- Decouples strategy creation from usage
+**Factory Pattern** - Centralizes strategy selection.
 
-**Dependency Injection**
-- Loose coupling throughout
-- Highly testable with mocked dependencies
+**Dependency Injection** - Loose coupling throughout for testability.
 
-### SOLID Principles
+## Running locally
 
-✅ **Single Responsibility:** Each class has one reason to change  
-✅ **Open/Closed:** Open for extension (new strategies), closed for modification  
-✅ **Liskov Substitution:** All strategies are interchangeable  
-✅ **Interface Segregation:** Small, focused interfaces  
-✅ **Dependency Inversion:** Depend on abstractions, not implementations
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-- .NET 8.0 SDK
-- Visual Studio 2022 / VS Code / Rider
-
-### Setup
-
+Prerequisites: .NET 8.0 SDK
 ```bash
-# Clone repository
 git clone https://github.com/NuwangaRodrigo/jobs-api-assignment.git
 cd jobs-api-assignment/JobProcessingApi
 
-# Restore dependencies
 dotnet restore
-
-# Build solution
 dotnet build
-
-# Run tests (all should pass)
 dotnet test
-
-# Run API
 cd src/JobProcessingApi.API
 dotnet run
 ```
 
-The API will start at: `https://localhost:XXXX` (check console output)
+Swagger UI will be available at the URL shown in console (usually https://localhost:XXXX).
 
-Swagger UI: `https://localhost:XXXX`
+## Authentication
 
----
+Uses JWT tokens. To test endpoints:
 
-## 🔐 Authentication
+1. POST to /api/auth/token with `{"username": "test-user"}`
+2. Copy the token from response
+3. In Swagger, click Authorize and enter: `Bearer YOUR_TOKEN`
 
-The API uses JWT authentication for all endpoints except token generation.
+For local testing, you can disable auth by commenting out `[Authorize]` in JobsController.cs
 
-### Generate Test Token
+## API endpoints
 
-**Option 1: Use Swagger UI**
-1. Go to `POST /api/auth/token`
-2. Click "Try it out"
-3. Request body:
-   ```json
-   {
-     "username": "test-user"
-   }
-   ```
-4. Click "Execute"
-5. Copy the token from response
-
-**Option 2: Use cURL**
-```bash
-curl -X POST https://localhost:XXXX/api/auth/token \
-  -H "Content-Type: application/json" \
-  -d '{"username":"test-user"}'
+**Start a job**
 ```
-
-### Use Token in Requests
-
-In Swagger:
-1. Click "Authorize" button (top right)
-2. Enter: `Bearer YOUR_TOKEN_HERE`
-3. Click "Authorize"
-
-In cURL:
-```bash
-curl -H "Authorization: Bearer YOUR_TOKEN_HERE" ...
-```
-
-**Note:** For development/testing, you can disable authentication by commenting out `[Authorize]` in `JobsController.cs`
-
----
-
-## 📖 API Usage
-
-### 1. Start a BULK Job
-
-**Request:**
-```http
 POST /api/jobs
-Content-Type: application/json
-Authorization: Bearer YOUR_TOKEN
-
 {
   "jobType": 0,
-  "items": [
-    "item-1-SUCCESS",
-    "item-2-SUCCESS",
-    "item-3-FAIL",
-    "item-4-SUCCESS"
-  ]
+  "items": ["item1", "item2", "item3"]
 }
 ```
+jobType: 0 = Bulk, 1 = Batch
 
-**Response (202 Accepted):**
-```json
-{
-  "jobId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "message": "Job accepted and processing started"
-}
+Returns 202 Accepted with a jobId. Processing starts in the background.
+
+**Check status**
 ```
-
-**Behavior:**
-- Processes all 4 items
-- Item 3 fails but processing continues
-- Final status: `PartiallyCompleted` (3/4 succeeded)
-
----
-
-### 2. Start a BATCH Job
-
-**Request:**
-```json
-{
-  "jobType": 1,
-  "items": [
-    "item-1-SUCCESS",
-    "item-2-FAIL",
-    "item-3-SUCCESS"
-  ]
-}
-```
-
-**Behavior:**
-- Processes items 1 and 2
-- Stops at item 2 (failure)
-- Item 3 is NOT processed
-- Final status: `Failed` (1/3 succeeded, 1 failed, 1 skipped)
-
----
-
-### 3. Check Job Status
-
-**Request:**
-```http
 GET /api/jobs/{jobId}/status
-Authorization: Bearer YOUR_TOKEN
 ```
 
-**Response (200 OK):**
-```json
-{
-  "jobId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "type": 0,
-  "status": 4,
-  "totalItems": 4,
-  "processedItems": 4,
-  "failedItems": 1,
-  "successfulItems": 3,
-  "progressPercentage": 100.0,
-  "createdAt": "2025-02-16T10:00:00Z",
-  "startedAt": "2025-02-16T10:00:01Z",
-  "completedAt": "2025-02-16T10:00:05Z"
-}
+Shows progress, item counts, and current status (0=Pending, 1=Running, 2=Completed, 3=Failed, 4=PartiallyCompleted).
+
+**Get logs**
 ```
-
-**Status Codes:**
-- `0` = Pending
-- `1` = Running
-- `2` = Completed
-- `3` = Failed
-- `4` = PartiallyCompleted
-
----
-
-### 4. Get Job Logs
-
-**Request:**
-```http
 GET /api/jobs/{jobId}/logs
-Authorization: Bearer YOUR_TOKEN
 ```
 
-**Response (200 OK):**
-```json
-{
-  "jobId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "logs": [
-    {
-      "itemIndex": 0,
-      "itemData": "item-1-SUCCESS",
-      "status": 0,
-      "description": "Successfully processed item: item-1-SUCCESS",
-      "processedAt": "2025-02-16T10:00:01Z",
-      "processingTimeMs": 487
-    },
-    {
-      "itemIndex": 2,
-      "itemData": "item-3-FAIL",
-      "status": 1,
-      "description": "Processing failed for item: item-3-FAIL",
-      "processedAt": "2025-02-16T10:00:03Z",
-      "processingTimeMs": 512
-    }
-  ]
-}
+Returns processing details for each item.
+
+## Testing
+
+`dotnet test` runs the full test suite. All 17 tests should pass.
+
+Tests cover processing strategies, service logic, and repository behavior. Using xUnit with Moq for mocking and FluentAssertions.
+
+## Data storage
+
+Currently using in-memory storage (ConcurrentDictionary) to keep setup simple and focus on architecture.
+
+The repository pattern makes switching to a database straightforward - just implement IJobRepository and update DI registration. Business logic stays the same.
+
+## Project structure
 ```
+src/
+  JobProcessingApi.API/          Controllers, middleware, config
+  JobProcessingApi.Core/         Domain models and interfaces
+  JobProcessingApi.Application/  Business logic and strategies  
+  JobProcessingApi.Infrastructure/ Data access
+tests/
+  JobProcessingApi.Tests/        Unit and integration tests
+```
+
+## How Bulk vs Batch differs
+
+**Bulk:**
+- Process item 1 → Success
+- Process item 2 → Failure
+- Process item 3 → Success (keeps going)
+- Result: PartiallyCompleted
+
+**Batch:**
+- Process item 1 → Success  
+- Process item 2 → Failure (stops)
+- Item 3 not processed
+- Result: Failed
+
+## Logging
+
+Serilog writes to console and logs/jobprocessing-YYYYMMDD.log
+
+## Technologies
+
+.NET 8, ASP.NET Core, C#, FluentValidation, Serilog, Swagger, JWT Bearer, xUnit, Moq, FluentAssertions
+
+## SOLID principles
+
+Each class has single responsibility. Strategy pattern allows extension without modification. Strategies are interchangeable. Interfaces are focused. Dependencies are on abstractions, not implementations.
+
+## Assignment requirements
+
+Covers all must-haves: solution compiles, proper .NET usage, clean code/SOLID, dependency injection, n-layer architecture, working job processing, unit tests.
+
+Also includes: design patterns, structured logging, middleware, API docs, authentication.
 
 ---
 
-## 🧪 Testing
-
-### Run All Tests
-```bash
-dotnet test
-```
-
-**Expected Output:**
-```
-Passed! - Failed: 0, Passed: 17, Skipped: 0
-```
-
-### Test Coverage
-
-- **Strategy Tests:** BULK and BATCH processing behaviors
-- **Service Tests:** Job orchestration and status tracking
-- **Repository Tests:** Data access and thread safety
-- **Integration Tests:** End-to-end flows
-
-**Testing Tools:**
-- xUnit (test framework)
-- Moq (mocking)
-- FluentAssertions (readable assertions)
-
----
-
-## 💾 Data Persistence
-
-
-Currently using in-memory storage (ConcurrentDictionary) to keep setup simple and focus on the architecture.
-
-The repository pattern means swapping to a database is easy - just implement IJobRepository and change one line in Program.cs. Business logic doesn't need to change.
-
----
-
-## 📊 Logging
-
-**Structured logging** with Serilog:
-
-```
-Console: Real-time output during development
-File: logs/jobprocessing-YYYYMMDD.log (daily rolling)
-```
-
-**Log Levels:**
-- `Debug`: Detailed item processing info
-- `Information`: Job lifecycle events
-- `Warning`: Item failures, validation issues
-- `Error`: Unexpected exceptions
-
-**Example log:**
-```
-[INF] Starting BULK job 3fa85f64 with 10 items
-[WRN] Item 3 failed for job 3fa85f64: Validation error
-[INF] BULK job 3fa85f64 completed. Processed: 10, Failed: 1
-```
-
----
-
-## 📦 Project Structure
-
-```
-JobProcessingApi/
-├── src/
-│   ├── JobProcessingApi.API/
-│   │   ├── Controllers/
-│   │   │   ├── AuthController.cs      # JWT token generation
-│   │   │   └── JobsController.cs      # Job endpoints
-│   │   ├── Middleware/
-│   │   │   ├── GlobalExceptionMiddleware.cs
-│   │   │   └── RequestLoggingMiddleware.cs
-│   │   ├── appsettings.json
-│   │   └── Program.cs                 # DI configuration
-│   │
-│   ├── JobProcessingApi.Core/
-│   │   ├── Entities/
-│   │   │   ├── Job.cs                 # Job entity
-│   │   │   └── JobItemLog.cs          # Log entry
-│   │   └── Interfaces/
-│   │       ├── IJobRepository.cs
-│   │       ├── IJobService.cs
-│   │       └── IItemProcessor.cs
-│   │
-│   ├── JobProcessingApi.Application/
-│   │   ├── Services/
-│   │   │   └── JobService.cs          # Job orchestration
-│   │   ├── Strategies/
-│   │   │   ├── IJobProcessingStrategy.cs
-│   │   │   ├── BulkJobProcessingStrategy.cs
-│   │   │   ├── BatchJobProcessingStrategy.cs
-│   │   │   └── JobProcessingStrategyFactory.cs
-│   │   └── Validators/
-│   │       └── StartJobCommandValidator.cs
-│   │
-│   └── JobProcessingApi.Infrastructure/
-│       ├── Repositories/
-│       │   └── InMemoryJobRepository.cs
-│       └── Services/
-│           └── MockItemProcessor.cs   # Simulates external processor
-│
-└── tests/
-    └── JobProcessingApi.Tests/
-        ├── Application/
-        │   ├── Services/
-        │   └── Strategies/
-        └── Infrastructure/
-            └── Repositories/
-```
-
----
-
-## 🔧 Configuration
-
-### appsettings.json
-
-```json
-{
-  "Jwt": {
-    "Key": "YourSuperSecretKeyThatShouldBeStoredSecurely12345",
-    "Issuer": "JobProcessingApi",
-    "Audience": "JobProcessingApiClients",
-    "ExpirationMinutes": 60
-  }
-}
-```
-
-**Production:** Use environment variables or Azure Key Vault for secrets.
-
----
-
-## 🚀 Deployment
-
-This solution can be deployed to:
-
-**Azure:**
-- App Service
-- Container Instances
-- AKS (Kubernetes)
-
-**AWS:**
-- Elastic Beanstalk
-- ECS/Fargate
-- EKS (Kubernetes)
-
-**Docker:**
-```bash
-docker build -t jobprocessing-api .
-docker run -p 8080:80 jobprocessing-api
-```
-
----
-
-## 🔄 Extending the System
-
-### Add a New Job Type
-
-1. Create new strategy:
-```csharp
-public class PriorityJobProcessingStrategy : IJobProcessingStrategy
-{
-    public JobType JobType => JobType.Priority;
-    public async Task ExecuteAsync(...) { /* logic */ }
-}
-```
-
-2. Register in DI:
-```csharp
-services.AddScoped<IJobProcessingStrategy, PriorityJobProcessingStrategy>();
-```
-
-3. Add enum value:
-```csharp
-public enum JobType { Bulk = 0, Batch = 1, Priority = 2 }
-```
-
-**No changes needed** to existing strategies, factory, or service!
-
----
-
-## 🐛 Troubleshooting
-
-**Port conflict:**
-```bash
-# Change port in Properties/launchSettings.json
-"applicationUrl": "https://localhost:7001"
-```
-
-**Authentication errors:**
-```bash
-# Verify JWT settings in appsettings.json
-# Or disable auth by commenting [Authorize] in JobsController.cs
-```
-
-**Tests failing:**
-```bash
-dotnet clean
-dotnet build
-dotnet test
-```
-
----
-
-## 📚 Technologies Used
-
-- **.NET 8.0** - Framework
-- **ASP.NET Core** - Web API
-- **C# 12** - Language
-- **Serilog** - Structured logging
-- **FluentValidation** - Input validation
-- **JWT Bearer** - Authentication
-- **Swagger/OpenAPI** - API documentation
-- **xUnit** - Testing framework
-- **Moq** - Mocking library
-- **FluentAssertions** - Test assertions
-
----
-
-## ✅ Assignment Requirements Met
-
-**MUST-HAVE:**
-- ✅ Solution compiles (0 errors)
-- ✅ Proper .NET Core usage
-- ✅ Clean code and SOLID principles
-- ✅ Dependency injection throughout
-- ✅ N-layer architecture
-- ✅ START JOB feature fully functional
-- ✅ Comprehensive unit tests (17/17 passing)
-
-**SHOULD-HAVE:**
-- ✅ Design patterns (Strategy, Factory, Repository)
-- ✅ Proper logging (Serilog with structured logs)
-
-**NICE-TO-HAVE:**
-- ✅ Middleware (exception handling, request logging)
-- ✅ API documentation (Swagger/OpenAPI)
-- ✅ Authentication (JWT)
-- ✅ Deployment guides (Azure, AWS, Docker)
-
----
-
-## 👤 Author
-
-Senior Backend Developer Candidate  
-Assignment for Ohpen Engineering Team
-
----
-
-
-**Last Updated:** February 2025  
-**Version:** 1.0.0
+Built for Ohpen Senior Backend Developer assignment.
