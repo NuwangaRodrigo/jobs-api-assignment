@@ -38,8 +38,8 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API for creating and processing bulk and batch jobs, with support for status tracking and logging.",
         Contact = new OpenApiContact
         {
-            Name = "Ohpen Engineering Team",
-            Email = "engineering@ohpen.com"
+            Name = "Nuwanga Rodrigo",
+            Email = "nuwanga.rodrigo@gmail.com"
         }
     });
 
